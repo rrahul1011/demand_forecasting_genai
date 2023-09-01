@@ -9,7 +9,6 @@ import plotly.express as px
 import seaborn as sns
 import pyperclip
 st.set_option('deprecation.showPyplotGlobalUse', False)
-openai.api_key = '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'
 st.set_page_config(
             page_title="Sigmoid GenAI",
             page_icon="Code/cropped-Sigmoid_logo_3x.png"  
