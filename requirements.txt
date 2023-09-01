@@ -18,6 +18,7 @@ unstructured
 pdf2image
 pytesseract
 python-docx
+plotly
 
 
 
