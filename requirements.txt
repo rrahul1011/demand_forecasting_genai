@@ -24,6 +24,6 @@ os
 clipboard
 pyperclip
 PyPDF2
-ipython
+
 
 
