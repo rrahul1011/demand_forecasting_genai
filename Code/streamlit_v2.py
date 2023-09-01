@@ -12,7 +12,7 @@ st.set_option('deprecation.showPyplotGlobalUse', False)
 openai.api_key = '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'
 st.set_page_config(
             page_title="Sigmoid GenAI",
-            page_icon="/Users/rahulkushwaha/Desktop/git/demand_forecasting_genai/Code/cropped-Sigmoid_logo_3x.png."  
+            page_icon="Code/cropped-Sigmoid_logo_3x.png"  
         )
 
 def select_country(d):
@@ -52,7 +52,7 @@ with tab2:
     def main():
             # Set a custom page title and icon
         st.sidebar.markdown("<hr style='border: 2px solid red; width: 100%;'>", unsafe_allow_html=True)
-        st.sidebar.image("/Users/rahulkushwaha/Desktop/git/demand_forecasting_genai/Code/cropped-Sigmoid_logo_3x.png", use_column_width=True)
+        st.sidebar.image("Code/cropped-Sigmoid_logo_3x.png", use_column_width=True)
         st.sidebar.markdown("<hr style='border: 2px solid red; width: 100%;'>", unsafe_allow_html=True)
         st.markdown("<hr style='border: 2px solid red; width: 100%;'>", unsafe_allow_html=True)
         st.markdown("<h1 style='color: blue;'>GenAI Data Analysis Dashboard</h1>", unsafe_allow_html=True)
