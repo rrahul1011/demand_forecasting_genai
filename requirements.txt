@@ -1,6 +1,10 @@
 openai==0.27.6
-
-
-
-
-
+numpy
+pandas
+streamlit
+os
+matplotlib
+plotly
+seaborn
+clipboard
+pyperclip
