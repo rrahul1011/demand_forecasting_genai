@@ -178,40 +178,40 @@ with tab2:
             except Exception as e:
                 st.error(f"An error occurred: {e}")
         st.markdown("---")
-        ### PDF or Txt Summarizer
-        st.subheader("Summarize Reports and Files")
-        st.markdown("Upload your report or file and get a summary.")
-        st.info("Please upload the file through the sidebar.")
-        st.sidebar.title("File Upload")
-        st.sidebar.markdown("📄 Upload a TXT or PDF file")
+        # ### PDF or Txt Summarizer
+        # st.subheader("Summarize Reports and Files")
+        # st.markdown("Upload your report or file and get a summary.")
+        # st.info("Please upload the file through the sidebar.")
+        # st.sidebar.title("File Upload")
+        # st.sidebar.markdown("📄 Upload a TXT or PDF file")
 
-        uploaded_file = st.sidebar.file_uploader("",
-                                                    type=["txt", "pdf"],
-                                                    help="")
+        # uploaded_file = st.sidebar.file_uploader("",
+        #                                             type=["txt", "pdf"],
+        #                                             help="")
 
-        if uploaded_file is not None:
-            st.success("File uploaded successfully!")
+        # if uploaded_file is not None:
+        #     st.success("File uploaded successfully!")
             
-            file_extension = uploaded_file.name.split(".")[-1]
+        #     file_extension = uploaded_file.name.split(".")[-1]
 
-            if file_extension == "txt":
-                content = read_text_file(uploaded_file.name)
-            elif file_extension == "pdf":
-                content = extract_text_from_pdf(uploaded_file.name)
-            else:
-                st.sidebar.error("Unsupported file format. Please upload a TXT or PDF file.")
-                return
-            user_question_text = st.text_area("Enter your questions here:", value="", height=100)
-            prompt_file = f"**Instructions:** Answer the user's question based on the provided paragraph,report,text,file only and if the question is not from the \
-                                file or text  always return complete response\
-                        \n\n**Paragraph:**\n[{content}]\
-                        \n\n**User Question:**\n[{user_question_text}]"
+        #     if file_extension == "txt":
+        #         content = read_text_file(uploaded_file.name)
+        #     elif file_extension == "pdf":
+        #         content = extract_text_from_pdf(uploaded_file.name)
+        #     else:
+        #         st.sidebar.error("Unsupported file format. Please upload a TXT or PDF file.")
+        #         return
+        #     user_question_text = st.text_area("Enter your questions here:", value="", height=100)
+        #     prompt_file = f"**Instructions:** Answer the user's question based on the provided paragraph,report,text,file only and if the question is not from the \
+        #                         file or text  always return complete response\
+        #                 \n\n**Paragraph:**\n[{content}]\
+        #                 \n\n**User Question:**\n[{user_question_text}]"
 
-            if st.button("Get Answer from File"):
-                response3 = get_completion(prompt_file)
-                st.write(response3)
-                pyperclip.copy(response3)
-                st.success('Text copied successfully!')
+        #     if st.button("Get Answer from File"):
+        #         response3 = get_completion(prompt_file)
+        #         st.write(response3)
+        #         pyperclip.copy(response3)
+        #         st.success('Text copied successfully!')
 
     if __name__ == "__main__":
         main()
