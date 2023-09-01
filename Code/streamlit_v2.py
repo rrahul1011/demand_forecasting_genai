@@ -7,10 +7,9 @@ from function import visualize_timeseries ,get_completion,yoy_growth,calculate_t
 import matplotlib.pyplot as plt
 import plotly.express as px
 import seaborn as sns
-from clipboard import copy as clipboard_copy
 import pyperclip
 st.set_option('deprecation.showPyplotGlobalUse', False)
-openai.api_key = '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'
+openai.api_key = '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'
 st.set_page_config(
             page_title="Sigmoid GenAI",
             page_icon="/Users/rahulkushwaha/Desktop/git/demand_forecasting_genai/Code/cropped-Sigmoid_logo_3x.png."  

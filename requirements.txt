@@ -19,10 +19,6 @@ pdf2image
 pytesseract
 python-docx
 plotly
-cv2
-os
-clipboard
-pyperclip
 PyPDF2
 
 

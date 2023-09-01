@@ -3,10 +3,7 @@ import pandas as pd
 import plotly.express as px 
 import streamlit as st
 import openai
-from pdf2image import convert_from_path
 import numpy as np
-
-from IPython.display import Image, display
 from PyPDF2 import PdfReader
 @st.cache_data
 def visualize_timeseries(df, level, country, channel, brand, SKU):
