@@ -13,7 +13,7 @@ st.set_option('deprecation.showPyplotGlobalUse', False)
 openai.api_key = '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'
 st.set_page_config(
             page_title="Sigmoid GenAI",
-            page_icon="demand_forecasting_genai/Data/cropped-Sigmoid_logo_3x.png."  
+            page_icon="/Users/rahulkushwaha/Desktop/git/demand_forecasting_genai/Code/cropped-Sigmoid_logo_3x.png."  
         )
 
 def select_country(d):
@@ -46,14 +46,14 @@ def select_level(d):
     return selected_levels, selected_channel, selected_brand, selected_SKU
 
 ##Reading the data
-df = pd.read_csv("demand_forecasting_genai/Data/Retail_Data.csv")
+df = pd.read_csv("/Users/rahulkushwaha/Desktop/git/demand_forecasting_genai/Data/Retail_Data.csv")
 tab1, tab2 = st.tabs(["About the App", "App"])
 with tab2:
     st.header("The APP")
     def main():
             # Set a custom page title and icon
         st.sidebar.markdown("<hr style='border: 2px solid red; width: 100%;'>", unsafe_allow_html=True)
-        st.sidebar.image("demand_forecasting_genai/Data/cropped-Sigmoid_logo_3x.png", use_column_width=True)
+        st.sidebar.image("/Users/rahulkushwaha/Desktop/git/demand_forecasting_genai/Code/cropped-Sigmoid_logo_3x.png", use_column_width=True)
         st.sidebar.markdown("<hr style='border: 2px solid red; width: 100%;'>", unsafe_allow_html=True)
         st.markdown("<hr style='border: 2px solid red; width: 100%;'>", unsafe_allow_html=True)
         st.markdown("<h1 style='color: blue;'>GenAI Data Analysis Dashboard</h1>", unsafe_allow_html=True)
@@ -110,7 +110,7 @@ with tab2:
 
 
     ### Chat boat
-        df_user = pd.read_csv("demand_forecasting_genai/Data/Retail_Data.csv")
+        df_user = pd.read_csv("/Users/rahulkushwaha/Desktop/git/demand_forecasting_genai/Data/Retail_Data.csv")
         st.markdown("---")
         st.subheader("Have more Questions? \U0001F4AC")
         st.write("Head of the dataset")
