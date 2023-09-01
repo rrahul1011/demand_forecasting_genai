@@ -3,14 +3,9 @@ import pandas as pd
 import plotly.express as px 
 import streamlit as st
 import openai
-import io
-import pytesseract
 from pdf2image import convert_from_path
-from PIL import Image
-import PIL
 import numpy as np
-import urllib
-import cv2
+
 from IPython.display import Image, display
 from PyPDF2 import PdfReader
 @st.cache_data
