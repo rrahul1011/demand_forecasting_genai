@@ -20,6 +20,10 @@ pytesseract
 python-docx
 plotly
 PyPDF2
+matplotlib
+seaborn
+numpy
+
 
 
 
