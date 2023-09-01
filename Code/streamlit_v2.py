@@ -1,7 +1,7 @@
 import numpy as np 
 import pandas as pd
 import streamlit as st 
-import openai
+import opena
 import os
 from function import visualize_timeseries ,get_completion,yoy_growth,calculate_trend_slope_dataframe,extract_text_from_pdf,read_text_file
 import matplotlib.pyplot as plt
