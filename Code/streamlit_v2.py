@@ -13,7 +13,7 @@ st.set_option('deprecation.showPyplotGlobalUse', False)
 openai.api_key = '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'
 st.set_page_config(
             page_title="Sigmoid GenAI",
-            page_icon="/Users/rahulkushwaha/Desktop/GenAI_version_2.1_git/demand_forecasting_genai/Code/cropped-Sigmoid_logo_3x.png."  
+            page_icon="Data/cropped-Sigmoid_logo_3x.pn."  
         )
 
 def select_country(d):
@@ -46,7 +46,7 @@ def select_level(d):
     return selected_levels, selected_channel, selected_brand, selected_SKU
 
 ##Reading the data
-df = pd.read_csv("/Users/rahulkushwaha/Desktop/GenAI_version_2/genAI_demand_forecasting/Data/Retail_Data.csv")
+df = pd.read_csv("Data/Retail_Data.csv")
 tab1, tab2 = st.tabs(["About the App", "App"])
 with tab2:
     st.header("The APP")
