@@ -1,0 +1,199 @@
+********************** SUMMARY **********************
+
+
+
+Missing Forecast check : PASS
+Negative Forecast check : PASS
+Flatline Forecast check : FAIL
+Historical Data Consistency check : FAIL
+
+
+
+Key count check :
+|    |   Keys After |   Keys After |    Keys After |
+|    |     Baseline |    Modelling |    Adjustment |
+|---:|-------------:|-------------:|--------------:|
+|  0 |         2935 |         2935 |          2935 |
+
+
+
+Accuracy check :
+|    |   3_Mon_Cum% |   3_Mon_Cum_A% |   3_Mon_Cum_B% |   3_Mon_Cum_C% |
+|---:|-------------:|---------------:|---------------:|---------------:|
+|  0 |      69.1065 |        80.2299 |         71.157 |        54.4578 |
+
+
+**Accuracy metric taking above 80% for class A and above 70% for class B and C : 78.45360824742268**
+
+
+
+****************** DETAIL ANALYSIS ******************
+
+
+
+**Analysis No_1 : Missing Forecast**
+
+
+
+Number of keys with null forecast entries: 0
+Number of Null forecast entries : 0
+
+
+
+**Analysis No_2 : Negative Forecast**
+
+
+
+Number of keys with negative forecast entries: 0
+Number of negative forecast entries : 0
+
+
+
+**Analysis No_3 : Flatline Forecast**
+
+
+
+Number of keys with flatline forecast : 1
+|    | key                                        | class   |
+|---:|:-------------------------------------------|:--------|
+|  0 | Poland_On-trade_US Whiskey_Premium_Spirits | A       |
+
+
+
+**Analysis No_4 : Historical Data Consistency**
+
+
+
+Number of keys with volume change after Adjustment: 1
+|    | key                                           |   month_count | months         |
+|---:|:----------------------------------------------|--------------:|:---------------|
+|  0 | France_On-trade_Tequila_Super Premium_Spirits |             1 | ['2020-11-01'] |
+
+
+
+**Analysis No_5 : Key Drop**
+
+
+
+NO key drop during Modelling
+
+
+
+NO key drop during Adjustment
+
+
+
+**Analysis No_6 : Accuracy Values comparison between Modelling and Adjustment**
+
+
+
+|            |   3_Mon_Cum% |   3_Mon_Cum_A% |   3_Mon_Cum_B% |   3_Mon_Cum_C% |
+|:-----------|-------------:|---------------:|---------------:|---------------:|
+| Modelling  |      69.7698 |        81.6092 |        71.8415 |        54.3373 |
+| Adjustment |      69.1065 |        85.2299 |        71.157  |        54.4578 |
+
+
+
+**Analysis No_7 : Keys with Historical data but with no Forecast data**
+
+
+
+   Number of keys with historical data : 2935
+   Number of keys with historical data but no forecast w.r.t. moderate scenario: 0
+
+
+
+
+**Analysis No_9 : Models**
+Distribution of best model type selected: 
+|    | model_type   |   keys (%) |
+|---:|:-------------|-----------:|
+|  0 | Multivariate |      59.18 |
+|  1 | Univariate   |      40.81 |
+
+**Analysis No_10 : Exogenous Features **
+Number of keys for which exogenous model selected : 1737 (59.18%)
+Distribution of exogenous feature used:
+
+
+|    | exog_feature            |   cases(%) |
+|---:|:------------------------|-----------:|
+|  0 | closure                 |      45.19 |
+|  1 | closure_lag_2           |      32.35 |
+|  2 | gdp_real_lag_q2         |      26.31 |
+|  3 | gdp_real                |      25.68 |
+|  4 | gdp_real_lag_q1         |      21.76 |
+|  5 | complete_lockdown       |      19.52 |
+|  6 | pricing_lag_2           |      18.42 |
+|  7 | interest_rate_lag_2     |      15.89 |
+|  8 | complete_lockdown_lag_1 |      15.72 |
+|  9 | google_trends           |      12.26 |
+| 10 | unemployment_rate       |      10.36 |
+| 11 | complete_lockdown_lag_2 |       9.1  |
+| 12 | google_trends_lag_2     |       5.87 |
+| 13 | interest_rate           |       4.89 |
+| 14 | pricing                 |       2.88 |
+| 15 | closure_lag_1           |       2.42 |
+| 16 | cpi                     |       1.84 |
+| 17 | google_trends_lag_1     |       1.38 |
+| 18 | pricing_lag_1           |       1.21 |
+| 19 | average_income_real     |       0.81 |
+| 20 | income_real             |       0.75 |
+| 21 | interest_rate_lag_1     |       0.23 |
+| 22 | unemployment_rate_lag_2 |       0.12 |
+| 23 | income_real_lag_2       |       0.06 |
+| 24 | cpi_lag_2               |       0.06 |
+
+
+
+**Analysis No_11 : Validation (3,4,5 months) Accuracy Values **
+
+
+
+|    |   Cumulative% |   Cum_A% |   Cum_B% |   Cum_C% |
+|---:|--------------:|---------:|---------:|---------:|
+|  2 |         68.91 |    86.39 |    71.59 |    48.51 |
+
+
+
+**Analysis No_12 : Missing keys in current release compare to previous release **
+
+
+
+Number of keys which are in previous release but not in current release --- 52
+
+
+Class wise distribution:-
+|    |   Percentage |
+|:---|-------------:|
+| C  |        73.08 |
+| B  |        23.08 |
+| A  |         3.85 |
+
+
+Country-sector of the missing keys that belongs either to class A or class B
+
+
+|    | country_sector                           |
+|---:|:-----------------------------------------|
+|  0 | Australia_Rum_Spirits                    |
+|  1 | Belgium_Aperitif_Spirits                 |
+|  2 | Bulgaria_Blended Scotch_Spirits          |
+|  3 | Bulgaria_RTD / FAB_Spirits               |
+|  4 | Croatia_Aperitif_Spirits                 |
+|  5 | France_Anise Drinks_Spirits              |
+|  6 | France_Other Spirits_Spirits             |
+|  7 | Netherlands_Other Spirits_Spirits        |
+|  8 | Northern Ireland_Brandy / Cognac_Spirits |
+|  9 | Norway_Other Spirits_Spirits             |
+| 10 | Slovakia_US Whiskey_Spirits              |
+
+
+
+**Analysis No_13 :Accuracy metric taking above 80% for class A and above 70% for class B and C : **
+
+
+
+|      |   3_Mon_Cum%_Overall |   3_Mon_Cum%_A |   3_Mon_Cum%_B |   3_Mon_Cum%_C |
+|:-----|---------------------:|---------------:|---------------:|---------------:|
+| %key |              78.4536 |        83.2299 |        82.8099 |         70.241 |
