@@ -54,6 +54,10 @@ with tab2:
         st.sidebar.markdown("<hr style='border: 2px solid red; width: 100%;'>", unsafe_allow_html=True)
         st.sidebar.image("Code/cropped-Sigmoid_logo_3x.png", use_column_width=True)
         st.sidebar.markdown("<hr style='border: 2px solid red; width: 100%;'>", unsafe_allow_html=True)
+        API = st.sidebar.text_input("Enter the API key:")
+        if st.sidebar.button("Enter"):
+            openai.api_key = API
+            st.sidebar.success("API key successfully set!")
         st.markdown("<hr style='border: 2px solid red; width: 100%;'>", unsafe_allow_html=True)
         st.markdown("<h1 style='color: blue;'>GenAI Data Analysis Dashboard</h1>", unsafe_allow_html=True)
         st.markdown("<hr style='border: 2px solid red; width: 100%;'>", unsafe_allow_html=True)
