@@ -108,75 +108,6 @@ with tab2:
             "
             response = get_completion(prompt)
             st.write(response)
-
-
-
-    ### Chat boat
-        df_user = pd.read_csv("Data/Retail_Data.csv")
-        st.markdown("---")
-        st.subheader("Have more Questions? \U0001F4AC")
-        st.write("Head of the dataset")
-        st.write(df_user.iloc[:, 1:].head())
-        
-        user_question = st.text_input("Ask a question about the dataset:") 
-        user_prompt = f"""
-        You are functioning as an AI data analyst. Your task is to respond to questions based on a provided dataset enclosed within square bracket [] .
-        If a question is not related to the dataset, reply with Not a valid question in st.warning format 
-        Do not start and end the code scripy with backticks for example like  this ```python and ```
-        donot read the dataframe using pd.read_csv just pass the ''df_user'' as function input
-        do not enclosed the code between the backticks like this ```python ```
-        do not start code script like ```python and do not end like ``` code must start with function defination and end end with function call   
-        Follow the instructions below and only return the executable code. The last line of the code should not be '```'; it should be the function call.
-        Do not call the function like unique_countries(df_user)``` or unique_countries(df_user) at the end of the code script. Do not write the backticks at the end.
-        Always show the function output with st.write or st.plot
-        [user_question] - {user_question} and start the code with function defination and end with function call and show the output either with st.write or st.pyplot and The code should not be enclosed within triple backticks.
-        [dataset columns] - {df_user.columns.tolist()}
-        ### Dataset Columns Description ###
-        'month' - Indicate the date on a monthly level. Treat it as a datetime; if needed, convert it to datetime.
-        'volume' - Total sales value on a particular date.
-        'year' - Indicate the year.
-        'channel' - Indicate whether the product is sold online or offline.
-        'brand' - Indicate the brand of the product.
-        'sku' - Indicate the SKU.
-        'scenario' - Indicate whether the corresponding month is a historical date or a forecasted month.
-        'Region name' - Indicate the region name.
-        'Market name' - Indicate the market name.
-        'category' - Indicate the category.
-        Provide code based on the user's instruction, keeping in mind that the name of the DataFrame is '''df_user'''.
-        Also, you have to print the final result of the code using 'st.write' for text or 'st.plot' for plots.
-        Return the output in function form only. Call the function below the response in the same script and provide all the code together.
-        Only give the output of the function as a response. Only return the code; do not include any explanations or extra text. 
-        If you include any comments, make sure each line starts with '#'.
-        Also, include the code to suppress any warnings. Do not include [assistant] - 
-        donot read the dataframe using pd.read_csv just pass the ''df_user'' as function input
-        do not do this step df_user = pd.read_csv('dataset.csv')
-        do not read any any dataset just call the function with the df_user
-        Always return the final output with st.write or st.pyplot
-        """
-
-
-
-        if st.button("Get Answer"):
-            if user_question:
-                #ai_response = generate_response_with_api(user_question, df_user)
-                ai_response = get_completion(user_prompt)
-                code =st.code(ai_response)
-                #exec(ai_response)            
-            else:
-                st.write("Please enter a question to analyze.")
-
-        st.subheader("Code Execution Dashboard")  
-        
-        # Create a code input textarea
-        code = st.text_area("Enter your code here", height=200)
-
-        # Add a button to run the code
-        if st.button("Execute code"): 
-            try:
-                # Use exec() to execute the code
-                exec(code)
-            except Exception as e:
-                st.error(f"An error occurred: {e}")
         st.markdown("---")
         # ### PDF or Txt Summarizer
         # st.subheader("Summarize Reports and Files")
@@ -238,9 +169,107 @@ with tab1:
     st.write("- Limited file format support for summarization (TXT and PDF).")
     st.write("- Active internet connection is required.")
     st.markdown("<hr style='border: 1.5px solid red; width: 100%;'>", unsafe_allow_html=True)
-    # Add any additional information or images as needed
+ 
+ #Tab 3
+with tab3:
 
+    # Initialize an empty dictionary to store column descriptions
+    column_descriptions = {}
 
-    # Your existing code for the "App" tab goes here
+    # Create a function to define the main content of your Streamlit app
+    def main():
+        st.markdown('<p style="color:red; font-size:30px; font-weight:bold;">CodeAI:</p>', unsafe_allow_html=True)
+        st.markdown("<hr style='border: 1.5px solid red; width: 100%;'>", unsafe_allow_html=True)
+        st.markdown('<p style="color:blue; font-size:20px; font-weight:bold;">How to Use:</p>', unsafe_allow_html=True)
+        st.markdown("""
+        - 📂 Upload a CSV or Excel file containing your dataset.
+        - 📝 Provide descriptions for each column of the dataset in the 'Column Descriptions' section.
+        - ❓ Ask questions about the dataset in the 'Ask a question about the dataset' section.
+        - 🔍 Click the 'Get Answer' button to generate code based on your question.
+        - ▶️ View and execute the generated code in the 'Code Execution Dashboard' section; please remove if any non-executable line is generated
+        """)
 
-    #write an email based on the summary of report to CEO not more than in 200 words write in point form at maximum include 10 points only in the email
+        # Display limitations with emojis
+        st.markdown("<hr style='border: 1.5px solid red; width: 100%;'>", unsafe_allow_html=True)
+        st.markdown('<p style="color:blue; font-size:20px; font-weight:bold;">Limitations ⚠️:</p>', unsafe_allow_html=True)
+        st.markdown("""
+        - The quality of AI responses depends on the quality and relevance of your questions.
+        - Ensure that you have a good understanding of the dataset columns to ask relevant questions.
+        - 🔒 Security: Be cautious when executing code, as it allows arbitrary code execution.
+        """)   
+        st.markdown("<hr style='border: 1.5px solid red; width: 100%;'>", unsafe_allow_html=True)
+        uploaded_file = st.file_uploader("Upload a CSV or Excel file", type=["csv", "xlsx"])
+        st.markdown('<p style="color:blue; font-size:20px; font-weight:bold;">Head of the Dataset:</p>', unsafe_allow_html=True)
+        
+        df_user = pd.DataFrame()
+        
+        if uploaded_file is not None:
+            try:
+                if uploaded_file.name.endswith('.csv'):
+                    df_user = pd.read_csv(uploaded_file)
+                elif uploaded_file.name.endswith(('.xls', '.xlsx')):
+                    df_user = pd.read_excel(uploaded_file)
+                
+                # Display the first few rows of the dataset
+                st.write(df_user.head())
+                
+                # Prompt the user to add column descriptions
+                st.info("Please add column descriptions of your dataset")
+                for col in df_user.columns:
+                    col_description = st.text_input(f"Description for column '{col}':")
+                    if col_description:
+                        column_descriptions[col] = col_description
+                
+                if st.button("Submit Descriptions"):
+                    st.success("Descriptions submitted successfully!")
+            except Exception as e:
+                st.error(f"An error occurred while reading the file: {e}")
+                return
+        
+        st.markdown("<hr style='border: 1.5px solid red; width: 100%;'>", unsafe_allow_html=True)
+        st.markdown('<p style="color:red; font-size:25px; font-weight:bold;">Ask a question about the dataset:</p>', unsafe_allow_html=True)
+        user_question = st.text_input(" ")
+        
+        # Generate a user prompt with dataset information
+        user_prompt = f"""
+        You are functioning as an AI data analyst. Your task is to respond to questions based on the provided dataset.
+        The user question will be delimited by single quote '{user_question}' , and the columns of the dataset are enclosed in square brackets {df_user.columns.tolist()}.
+        Dataset Columns Description is enclosed in dict format - {column_descriptions}.
+        Provide code based on the user's question, keeping in mind that the name of the DataFrame is 'df_user'.
+        Also, you have to print the final result of the code using 'st.write' for text or 'st.plot' for plots.
+        Return the output in function form only. Call the function below the response in the same script and provide all the code together.
+        Only give the output of the function as a response. Only return the code; do not include any explanations or extra text.
+        If you include any comments, make sure each line starts with '#'.
+        Also, include the code to suppress any warnings. Do not include [assistant].
+        Do not read any dataset; just call the function with the df_user.
+        Always return the final output with st.write or st.pyplot.
+        Only give the code according to the user question
+        Do not enclose the code in triple backticks only give the executable code the code must start with the function def and end with the function call\n
+        Only give the executable line do not include any character that is non-executable
+        """
+        
+        st.markdown('<style>div.row-widget.stButton > button:first-child {background-color: blue; color: white;}</style>', unsafe_allow_html=True)
+        
+        if st.button("Get Answer"):
+            if user_question:
+                ai_response = get_completion(user_prompt)
+                code = st.code(ai_response)
+            else:
+                st.warning("Not a valid question. Please enter a question to analyze.")
+        
+        st.markdown('<p style="color:red; font-size:25px; font-weight:bold;">Code Execution Dashboard:</p>', unsafe_allow_html=True)
+    
+        st.markdown("<hr style='border: 1.5px solid red; width: 100%;'>", unsafe_allow_html=True)
+        code_input = st.text_area("Enter your code here", height=200)
+        st.warning(("⚠️ If there is any non-executable line in generated code; please remove it"))
+        
+        if st.button("Execute code"): 
+            try:
+                # Use exec() to execute the code
+                exec(code_input)
+            except Exception as e:
+                st.error(f"An error occurred: {e}")
+
+    # Check if the script is run as the main program
+    if __name__ == "__main__":
+        main()
