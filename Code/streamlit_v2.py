@@ -45,7 +45,7 @@ def select_level(d):
 
 ##Reading the data
 df = pd.read_csv("Data/Retail_Data.csv")
-tab1, tab2 = st.tabs(["About the App", "App"])
+tab1, tab2 ,tab3= st.tabs(["About the App", "App","CodeAI"])
 with tab2:
     st.header("The APP")
     def main():
