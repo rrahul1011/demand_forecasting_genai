@@ -19,7 +19,7 @@ st.sidebar.markdown("<hr style='border: 2px solid red; width: 100%;'>", unsafe_a
 st.sidebar.image("Data/cropped-Sigmoid_logo_3x.png", use_column_width=True)
 st.sidebar.markdown("<hr style='border: 2px solid red; width: 100%;'>", unsafe_allow_html=True)
 API_KEY = st.sidebar.text_input("Enter the API key:",type="password")
-API=None
+API="abc"
 if st.sidebar.button("Enter"):
     API=API_KEY
     st.sidebar.success("API key successfully set!")
