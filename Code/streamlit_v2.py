@@ -8,11 +8,20 @@ import matplotlib.pyplot as plt
 import plotly.express as px
 import seaborn as sns
 import pyperclip
+from langchain.chat_models import ChatOpenAI
+from langchain.prompts import ChatPromptTemplate
 st.set_option('deprecation.showPyplotGlobalUse', False)
 st.set_page_config(
             page_title="Sigmoid GenAI",
-            page_icon="Code/cropped-Sigmoid_logo_3x.png"  
+            page_icon="/Users/rahulkushwaha/Desktop/git/demand_forecasting_genai/Data/cropped-Sigmoid_logo_3x.png"  
         )
+st.sidebar.markdown("<hr style='border: 2px solid red; width: 100%;'>", unsafe_allow_html=True)
+st.sidebar.image("/Users/rahulkushwaha/Desktop/git/demand_forecasting_genai/Data/cropped-Sigmoid_logo_3x.png", use_column_width=True)
+st.sidebar.markdown("<hr style='border: 2px solid red; width: 100%;'>", unsafe_allow_html=True)
+API = st.sidebar.text_input("Enter the API key:",type="password")
+if st.sidebar.button("Enter"):
+    openai.api_key = API
+    st.sidebar.success("API key successfully set!")
 
 def select_country(d):
     country = st.sidebar.selectbox("Select Country:", d["geo"].unique().tolist())
@@ -43,31 +52,34 @@ def select_level(d):
 
     return selected_levels, selected_channel, selected_brand, selected_SKU
 
+
+
 ##Reading the data
-df = pd.read_csv("Data/Retail_Data.csv")
-tab1, tab2 ,tab3= st.tabs(["About the App", "App","CodeAI"])
+df_dash = pd.read_csv("/Users/rahulkushwaha/Desktop/git/demand_forecasting_genai/Data/Retail_Data.csv")
+tab1, tab2 ,tab3= st.tabs(["About the App", "Demand forecasting interpreater","CodeAI"])
 with tab2:
-    st.header("The APP")
+
     def main():
-            # Set a custom page title and icon
-        st.sidebar.markdown("<hr style='border: 2px solid red; width: 100%;'>", unsafe_allow_html=True)
-        st.sidebar.image("Code/cropped-Sigmoid_logo_3x.png", use_column_width=True)
-        st.sidebar.markdown("<hr style='border: 2px solid red; width: 100%;'>", unsafe_allow_html=True)
-        API = st.sidebar.text_input("Enter the API key:",type="password")
-        if st.sidebar.button("Enter"):
-            openai.api_key = API
-            st.sidebar.success("API key successfully set!")
         st.markdown("<hr style='border: 2px solid red; width: 100%;'>", unsafe_allow_html=True)
-        st.markdown("<h1 style='color: blue;'>GenAI Data Analysis Dashboard</h1>", unsafe_allow_html=True)
+        st.markdown("<h1 style='color: blue;'>GenAI: Time Series Dashboard</h1>", unsafe_allow_html=True)
         st.markdown("<hr style='border: 2px solid red; width: 100%;'>", unsafe_allow_html=True)
+        st.subheader("👨‍💻  How to Use")
+        st.write("1. Select a country from the sidebar to filter data.")
+        st.write("2. Choose the levels you want to analyze: geo, channel, brand, SKU.")
+        st.write("3. Visualize your time series data.")
+        st.write("4. Click on Get insights.")
+        st.markdown("<hr style='border: 1.5px solid red; width: 100%;'>", unsafe_allow_html=True)
+        st.subheader(" ⚠️  Limitations")
+        st.write("- It may not capture all nuances and context")
+        st.markdown("<hr style='border: 1.5px solid red; width: 100%;'>", unsafe_allow_html=True)
         st.sidebar.header("User Inputs")
-        country = select_country(df)
-        selected_levels = select_level(df)
+        country = select_country(df_dash)
+        selected_levels = select_level(df_dash)
 
         # Time Series Visualization Section
         st.subheader("Visualize your time series")
         st.markdown("---")
-        data = visualize_timeseries(df,selected_levels[0], country,
+        data = visualize_timeseries(df_dash,selected_levels[0], country,
                                     selected_levels[1], selected_levels[2], selected_levels[3])    
         data_trend = calculate_trend_slope_dataframe(data)
         if data_trend.empty:
@@ -79,70 +91,38 @@ with tab2:
         else:
             data_yoy = yoy_growth(data)
         data_trend_3 =data_trend_2[["scenario","trend"]]
-        ## Forescated and Historical analysis
         if st.button("Get Analysis"):
-            prompt = f"You are functioning as an AI data analyst.You will be answer based on two dataset trend_dataset and year on year growth dataset \
-            Trend datset have following columns:\n\n\
-            - **Scenario**: An indicator that distinguishes whether a given volume data point is of historical nature or a forecast. \
-            Specifically, the 'historical' scenario signifies historical data, while the 'forecasted' scenario points to forecasted data.\n\n\
-            - **Trend**: Indicate the trend of the data for that speific scenario\
-            Year on year growth dataset have following columns:\
-            - **Year**: Indicate yera\
-            - ** yoy_growt** : Indicate percenatge volume chnaged with respect to previous year\
-            Befor performing the task check wheter the dataset have data or not If dataset is empty, \
-            donot perform the other task return a message in bold letters that '''There is no dataset to perfrom analysis'''\
-            Start the ouput as '''Inshight and Findings:-''' and also give the output in the point format\
-            The primary objectives encompass the following tasks:\n\n\
-            Analyze the trend only on the base of ''trend column'' of  trend dataset\
-            1. **Analyze Historical Data**\n\n\
-            2. **Analyze Forecasted Data** \n\n\
-            On the basis of year on year growth dataset do the following:-\
-            - Conclusions about the dataset's performance over the years. And also include some suggestions why the flacuation have occurs \n\n\
-            Please provide this analysis without the inclusion of any code. \
-            The provided trend_dataset,  {data_trend_3}\n\n\
-            The provide year on year growth dataset, {data_yoy}\
-            Please only report back the Inshigt and findings\
-            Use at most 200 words. For each analyis return only one line and donot return any note\
-            Do not include the name like trend dataset or year on year growth dataset ,write your response such that your are giving your response\
-            by analysing a plot\
-            "
-            response = get_completion(prompt)
-            st.write(response)
+            ## Forescated and Historical analysis
+            analysis_string ="""Generate the analysis based on instruction\
+                                    that is delimated by triple backticks.\
+                                    isntruction: ```{instruction_analyis}```\
+                                    """
+            analysis_templete= ChatPromptTemplate.from_template(analysis_string)
+
+            instruction_analyis =f"""You are functioning as an AI data analyst.
+            1.You will be analyzing two datasets: trend_dataset and year on year growth dataset.
+            2.Trend_dataset has the following columns:
+                Scenario: Indicates if a data point is historical or forecasted.
+                Trend: Indicates the trend of the data for a specific scenario.
+                year on year growth dataset has the following columns:
+                Year: Indicates the year.
+                yoy_growth: Indicates the percentage volume change compared to the previous year.
+            4.Start the output as "Insight and Findings:" and report in point  form
+            5.Analyze the trend based on the 'Trend' column of the trend_dataset:
+                a.Analyze Historical Data.
+                b.Analyze Forecasted Data.
+            6.Analyze the year on year growth based on the year on year growth dataset also include the change percentage
+            7.Provide this analysis without including any code.
+            8.The datasets: {data_trend_3} for trend analysis and {data_yoy} for year-on-year growth analysis.
+            9.Report back only the insights and findings.
+            10.Use at most 200 words.
+            11.provide conclusions about the dataset's performance over the years and include suggestions for why fluctuations occurred also include the year on year 
+            12.Present your findings as if you are analyzing a plot."""
+            chat = ChatOpenAI(temperature=0.0, model="gpt-3.5-turbo-0301",openai_api_key=API)
+            user_analysis = analysis_templete.format_messages(instruction_analyis=instruction_analyis)
+            response = chat(user_analysis)
+            st.write(response.content)
         st.markdown("---")
-        # ### PDF or Txt Summarizer
-        # st.subheader("Summarize Reports and Files")
-        # st.markdown("Upload your report or file and get a summary.")
-        # st.info("Please upload the file through the sidebar.")
-        # st.sidebar.title("File Upload")
-        # st.sidebar.markdown("📄 Upload a TXT or PDF file")
-
-        # uploaded_file = st.sidebar.file_uploader("",
-        #                                             type=["txt", "pdf"],
-        #                                             help="")
-
-        # if uploaded_file is not None:
-        #     st.success("File uploaded successfully!")
-            
-        #     file_extension = uploaded_file.name.split(".")[-1]
-
-        #     if file_extension == "txt":
-        #         content = read_text_file(uploaded_file.name)
-        #     elif file_extension == "pdf":
-        #         content = extract_text_from_pdf(uploaded_file.name)
-        #     else:
-        #         st.sidebar.error("Unsupported file format. Please upload a TXT or PDF file.")
-        #         return
-        #     user_question_text = st.text_area("Enter your questions here:", value="", height=100)
-        #     prompt_file = f"**Instructions:** Answer the user's question based on the provided paragraph,report,text,file only and if the question is not from the \
-        #                         file or text  always return complete response\
-        #                 \n\n**Paragraph:**\n[{content}]\
-        #                 \n\n**User Question:**\n[{user_question_text}]"
-
-        #     if st.button("Get Answer from File"):
-        #         response3 = get_completion(prompt_file)
-        #         st.write(response3)
-        #         pyperclip.copy(response3)
-        #         st.success('Text copied successfully!')
 
     if __name__ == "__main__":
         main()
@@ -150,23 +130,16 @@ with tab1:
     st.header("About The App")
     st.markdown("<hr style='border: 2px solid red; width: 100%;'>", unsafe_allow_html=True)   
     # Add your app description and information here
-    st.markdown("👋 Welcome to Sigmoid GenAI - Your Data Analysis Dashboard!")
+    st.markdown("👋 Welcome to Sigmoid GenAI - Your Data Analysis APP!")
     st.write("This app is designed to help you analyze and visualize your data.")
     st.markdown("<hr style='border: 1.5px solid red; width: 100%;'>", unsafe_allow_html=True)
-    st.subheader("How to Use")
-    st.write("1. Select a country from the sidebar to filter data.")
-    st.write("2. Choose the levels you want to analyze: geo, channel, brand, SKU.")
-    st.write("3. Visualize your time series data.")
-    st.write("4. Analyze historical and forecasted data trends.")
-    st.write("5. Get insights on year-on-year growth.")
-    st.write("6. Ask questions about the dataset using the chatbot.")
-    st.write("7. Summarize reports and files.")
+    st.subheader("👨‍💻  How to Use")
+    st.write("1. Please enter your API key in side bar and click on the ENTER")
+    st.write("2. From the top this page please select the required tab")
+    st.write("3. Follow the instruction of that tab.")
     st.markdown("<hr style='border: 1.5px solid red; width: 100%;'>", unsafe_allow_html=True)
-    st.subheader("🎯  Limitations")
+    st.subheader("⚠️   Limitations")
     st.write("Please note the following limitations:")
-    st.write("- Limited to time series data analysis and visualization.")
-    st.write("- Complex data handling may require additional coding.")
-    st.write("- Limited file format support for summarization (TXT and PDF).")
     st.write("- Active internet connection is required.")
     st.markdown("<hr style='border: 1.5px solid red; width: 100%;'>", unsafe_allow_html=True)
  
@@ -176,7 +149,6 @@ with tab3:
     # Initialize an empty dictionary to store column descriptions
     column_descriptions = {}
 
-    # Create a function to define the main content of your Streamlit app
     def main():
         st.markdown('<p style="color:red; font-size:30px; font-weight:bold;">CodeAI:</p>', unsafe_allow_html=True)
         st.markdown("<hr style='border: 1.5px solid red; width: 100%;'>", unsafe_allow_html=True)
@@ -185,8 +157,7 @@ with tab3:
         - 📂 Upload a CSV or Excel file containing your dataset.
         - 📝 Provide descriptions for each column of the dataset in the 'Column Descriptions' section.
         - ❓ Ask questions about the dataset in the 'Ask a question about the dataset' section.
-        - 🔍 Click the 'Get Answer' button to generate code based on your question.
-        - ▶️ View and execute the generated code in the 'Code Execution Dashboard' section; please remove if any non-executable line is generated
+        - 🔍 Click the 'Get Answer' button to generate answer based on your question.
         """)
 
         # Display limitations with emojis
@@ -195,7 +166,6 @@ with tab3:
         st.markdown("""
         - The quality of AI responses depends on the quality and relevance of your questions.
         - Ensure that you have a good understanding of the dataset columns to ask relevant questions.
-        - 🔒 Security: Be cautious when executing code, as it allows arbitrary code execution.
         """)   
         st.markdown("<hr style='border: 1.5px solid red; width: 100%;'>", unsafe_allow_html=True)
         uploaded_file = st.file_uploader("Upload a CSV or Excel file", type=["csv", "xlsx"])
@@ -213,7 +183,7 @@ with tab3:
                 # Display the first few rows of the dataset
                 st.write(df_user.head())
                 
-                # Prompt the user to add column descriptions
+
                 st.info("Please add column descriptions of your dataset")
                 for col in df_user.columns:
                     col_description = st.text_input(f"Description for column '{col}':")
@@ -230,46 +200,59 @@ with tab3:
         st.markdown('<p style="color:red; font-size:25px; font-weight:bold;">Ask a question about the dataset:</p>', unsafe_allow_html=True)
         user_question = st.text_input(" ")
         
-        # Generate a user prompt with dataset information
-        user_prompt = f"""
-        You are functioning as an AI data analyst. Your task is to respond to questions based on the provided dataset.
-        The user question will be delimited by single quote '{user_question}' , and the columns of the dataset are enclosed in square brackets {df_user.columns.tolist()}.
-        Dataset Columns Description is enclosed in dict format - {column_descriptions}.
-        Provide code based on the user's question, keeping in mind that the name of the DataFrame is 'df_user'.
-        Also, you have to print the final result of the code using 'st.write' for text or 'st.plot' for plots.
-        Return the output in function form only. Call the function below the response in the same script and provide all the code together.
-        Only give the output of the function as a response. Only return the code
-        ; do not include any explanations or extra text.
-        If you include any comments, make sure each line starts with '#'.
-        Also, include the code to suppress any warnings. Do not include [assistant].
-        Do not read any dataset; just call the function with the df_user.
-        Always return the final output with st.write or st.pyplot.
-        Only give the code according to the user question
-        Do not enclose the code in triple backticks only give the executable code the code must start with the function def and end with the function call
-        Only give the executable line do not include any character that is non-executable
-        """
-        
+
+        code_string ="""Generate the python code based on the user question\
+            that is delimated by triple backticks\
+                based on the instruction that is {instruction}.\
+                    user question: ```{user_question}```\
+                        """
+        code_templete= ChatPromptTemplate.from_template(code_string)
+
+        instruction =f"""1. You are functioning as an AI data analyst.
+        2. Task: Respond to questions based on the provided dataset.
+        4. Dataset columns enclosed in square brackets {df_user.columns.tolist()}.
+        5. Columns Description in dict format - {column_descriptions}.
+        6. Provide code based on the user's question.
+        7. DataFrame name: 'df_user'.
+        8. Print result using 'st.write' for text or 'st.plot' for plots.
+        9. Return the output in function form only.
+        10. Call the function below the response in the same script.
+        11. Provide all the code together.
+        12. Only return the code; no explanations or extra text.
+        13. Include code to suppress warnings.
+        14. Do not include [assistant].
+        15. Do not read any dataset; call the function with df_user.
+        16. Return final output with st.write or st.pyplot.
+        17. Only give the executable code.
+        18. Code must start with 'def' and end with the function call.
+        19. Do not enclose the code in triple backticks.
+        20. Only give the executable line; no non-executable characters."""
+
+        user_message = code_templete.format_messages(instruction=instruction,user_question=user_question)
+                
         st.markdown('<style>div.row-widget.stButton > button:first-child {background-color: blue; color: white;}</style>', unsafe_allow_html=True)
-        
+        chat = ChatOpenAI(temperature=0.0, model="gpt-3.5-turbo-0301",openai_api_key=API)
         if st.button("Get Answer"):
             if user_question:
-                ai_response = get_completion(user_prompt)
-                code = st.code(ai_response)
+                user_message = code_templete.format_messages(instruction=instruction,user_question=user_question)
+                code = chat(user_message)
+                st.code(code.content)
+                exec(code.content)
             else:
                 st.warning("Not a valid question. Please enter a question to analyze.")
         
-        st.markdown('<p style="color:red; font-size:25px; font-weight:bold;">Code Execution Dashboard:</p>', unsafe_allow_html=True)
+        # st.markdown('<p style="color:red; font-size:25px; font-weight:bold;">Code Execution Dashboard:</p>', unsafe_allow_html=True)
     
-        st.markdown("<hr style='border: 1.5px solid red; width: 100%;'>", unsafe_allow_html=True)
-        code_input = st.text_area("Enter your code here", height=200)
-        st.warning(("⚠️ If there is any non-executable line in generated code; please remove it"))
+        # st.markdown("<hr style='border: 1.5px solid red; width: 100%;'>", unsafe_allow_html=True)
+        # code_input = st.text_area("Enter your code here", height=200)
+        # st.warning(("⚠️ If there is any non-executable line in generated code; please remove it"))
         
-        if st.button("Execute code"): 
-            try:
-                # Use exec() to execute the code
-                exec(code_input)
-            except Exception as e:
-                st.error(f"An error occurred: {e}")
+        # if st.button("Execute code"): 
+        #     try:
+        #         # Use exec() to execute the code
+        #         exec(code_input)
+        #     except Exception as e:
+        #         st.error(f"An error occurred: {e}")
 
     # Check if the script is run as the main program
     if __name__ == "__main__":

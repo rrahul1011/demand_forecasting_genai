@@ -27,6 +27,7 @@ pyperclip
 openpyxl
 io
 fpdf
+langchain
 
 
 
