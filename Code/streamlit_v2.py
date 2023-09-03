@@ -18,9 +18,9 @@ st.set_page_config(
 st.sidebar.markdown("<hr style='border: 2px solid red; width: 100%;'>", unsafe_allow_html=True)
 st.sidebar.image("Data/cropped-Sigmoid_logo_3x.png", use_column_width=True)
 st.sidebar.markdown("<hr style='border: 2px solid red; width: 100%;'>", unsafe_allow_html=True)
-API = st.sidebar.text_input("Enter the API key:",type="password")
+API_KEY = st.sidebar.text_input("Enter the API key:",type="password")
 if st.sidebar.button("Enter"):
-    openai.api_key = API
+    API=API_KEY
     st.sidebar.success("API key successfully set!")
 
 def select_country(d):
