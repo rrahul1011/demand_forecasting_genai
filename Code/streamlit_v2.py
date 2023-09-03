@@ -13,10 +13,10 @@ from langchain.prompts import ChatPromptTemplate
 st.set_option('deprecation.showPyplotGlobalUse', False)
 st.set_page_config(
             page_title="Sigmoid GenAI",
-            page_icon="/Users/rahulkushwaha/Desktop/git/demand_forecasting_genai/Data/cropped-Sigmoid_logo_3x.png"  
+            page_icon="Data/cropped-Sigmoid_logo_3x.png"  
         )
 st.sidebar.markdown("<hr style='border: 2px solid red; width: 100%;'>", unsafe_allow_html=True)
-st.sidebar.image("/Users/rahulkushwaha/Desktop/git/demand_forecasting_genai/Data/cropped-Sigmoid_logo_3x.png", use_column_width=True)
+st.sidebar.image("Data/cropped-Sigmoid_logo_3x.png", use_column_width=True)
 st.sidebar.markdown("<hr style='border: 2px solid red; width: 100%;'>", unsafe_allow_html=True)
 API = st.sidebar.text_input("Enter the API key:",type="password")
 if st.sidebar.button("Enter"):
@@ -55,7 +55,7 @@ def select_level(d):
 
 
 ##Reading the data
-df_dash = pd.read_csv("/Users/rahulkushwaha/Desktop/git/demand_forecasting_genai/Data/Retail_Data.csv")
+df_dash = pd.read_csv("Data/Retail_Data.csv")
 tab1, tab2 ,tab3= st.tabs(["About the App", "Demand forecasting interpreater","CodeAI"])
 with tab2:
 
@@ -231,11 +231,11 @@ with tab3:
         user_message = code_templete.format_messages(instruction=instruction,user_question=user_question)
                 
         st.markdown('<style>div.row-widget.stButton > button:first-child {background-color: blue; color: white;}</style>', unsafe_allow_html=True)
-        chat = ChatOpenAI(temperature=0.0, model="gpt-3.5-turbo-0301",openai_api_key=API)
+        chat2 = ChatOpenAI(temperature=0.0, model="gpt-3.5-turbo-0301",openai_api_key=API)
         if st.button("Get Answer"):
             if user_question:
                 user_message = code_templete.format_messages(instruction=instruction,user_question=user_question)
-                code = chat(user_message)
+                code = chat2(user_message)
                 st.code(code.content)
                 exec(code.content)
             else:
