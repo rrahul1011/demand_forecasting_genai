@@ -28,6 +28,7 @@ openpyxl
 io
 fpdf
 langchain
+logger
 
 
 

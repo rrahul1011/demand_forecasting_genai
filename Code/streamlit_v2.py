@@ -3,7 +3,7 @@ import pandas as pd
 import streamlit as st 
 import openai
 import os
-from function import visualize_timeseries ,get_completion,yoy_growth,calculate_trend_slope_dataframe,extract_text_from_pdf,read_text_file,model
+from function import visualize_timeseries ,get_completion,yoy_growth,calculate_trend_slope_dataframe,extract_text_from_pdf,read_text_file,model,is_open_ai_key_valid
 import matplotlib.pyplot as plt
 import plotly.express as px
 import seaborn as sns
@@ -13,14 +13,39 @@ from langchain.prompts import ChatPromptTemplate
 st.set_option('deprecation.showPyplotGlobalUse', False)
 st.set_page_config(
             page_title="Sigmoid GenAI",
-            page_icon="Data/cropped-Sigmoid_logo_3x.png"  
+            page_icon="/Users/rahulkushwaha/Desktop/git/demand_forecasting_genai/Data/cropped-Sigmoid_logo_3x.png"  
         )
 st.sidebar.markdown("<hr style='border: 2px solid red; width: 100%;'>", unsafe_allow_html=True)
-st.sidebar.image("Data/cropped-Sigmoid_logo_3x.png", use_column_width=True)
+st.sidebar.image("/Users/rahulkushwaha/Desktop/git/demand_forecasting_genai/Data/cropped-Sigmoid_logo_3x.png", use_column_width=True)
 st.sidebar.markdown("<hr style='border: 2px solid red; width: 100%;'>", unsafe_allow_html=True)
 with st.sidebar:
-    openai_api_key = st.text_input("OpenAI API Key", key="api_key", type="password")
-    
+        st.markdown(
+            "## How to use\n"
+            "1. Enter your [OpenAI API key](https://platform.openai.com/account/api-keys) below🔑\n" 
+            "2. Press Enter"
+            
+          
+        )
+        api_key_input = st.text_input(
+            "OpenAI API Key",
+            type="password",
+            placeholder="Paste your OpenAI API key here (sk-...)",
+            help="You can get your API key from https://platform.openai.com/account/api-keys.", 
+            value=os.environ.get("OPENAI_API_KEY", None)
+            or st.session_state.get("OPENAI_API_KEY", ""),
+        )
+
+        st.session_state["OPENAI_API_KEY"] = api_key_input
+
+
+openai_api_key = st.session_state.get("OPENAI_API_KEY")
+if not openai_api_key:
+    st.warning(
+        "Enter your OpenAI API key in the sidebar. You can get a key at"
+        " https://platform.openai.com/account/api-keys."
+    )
+if not is_open_ai_key_valid(openai_api_key):
+    st.stop()
 def select_country(d):
     country = st.sidebar.selectbox("Select Country:", d["geo"].unique().tolist())
     return country
@@ -53,7 +78,7 @@ def select_level(d):
 
 
 ##Reading the data
-df_dash = pd.read_csv("Data/Retail_Data.csv")
+df_dash = pd.read_csv("/Users/rahulkushwaha/Desktop/git/demand_forecasting_genai/Data/Retail_Data.csv")
 tab1, tab2 ,tab3= st.tabs(["About the App", "Demand forecasting interpreater","CodeAI"])
 with tab2:
 
@@ -116,8 +141,7 @@ with tab2:
             10.Use at most 200 words.
             11.provide conclusions about the dataset's performance over the years and include suggestions for why fluctuations occurred also include the year on year 
             12.Present your findings as if you are analyzing a plot."""
-            openai.api_key = openai_api_key
-            chat = ChatOpenAI(temperature=0.0, model=model)
+            chat = ChatOpenAI(temperature=0.0, model=model,openai_api_key=openai_api_key)
             user_analysis = analysis_templete.format_messages(instruction_analyis=instruction_analyis)
             response = chat(user_analysis)
             st.write(response.content)
@@ -230,8 +254,7 @@ with tab3:
         user_message = code_templete.format_messages(instruction=instruction,user_question=user_question)
                 
         st.markdown('<style>div.row-widget.stButton > button:first-child {background-color: blue; color: white;}</style>', unsafe_allow_html=True)
-        openai.api_key = openai_api_key
-        chat2 = ChatOpenAI(temperature=0.0, model=model)
+        chat2 = ChatOpenAI(temperature=0.0, model=model,openai_api_key=openai_api_key)
         if st.button("Get Answer"):
             if user_question:
                 user_message = code_templete.format_messages(instruction=instruction,user_question=user_question)
