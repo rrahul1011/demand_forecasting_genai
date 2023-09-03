@@ -130,3 +130,5 @@ def read_text_file(filename):
                 data.append(stripped_line)
     return data
 
+model ="gpt-3.5-turbo-0301"
+

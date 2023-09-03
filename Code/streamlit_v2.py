@@ -3,7 +3,7 @@ import pandas as pd
 import streamlit as st 
 import openai
 import os
-from function import visualize_timeseries ,get_completion,yoy_growth,calculate_trend_slope_dataframe,extract_text_from_pdf,read_text_file
+from function import visualize_timeseries ,get_completion,yoy_growth,calculate_trend_slope_dataframe,extract_text_from_pdf,read_text_file,model
 import matplotlib.pyplot as plt
 import plotly.express as px
 import seaborn as sns
@@ -118,7 +118,7 @@ with tab2:
             10.Use at most 200 words.
             11.provide conclusions about the dataset's performance over the years and include suggestions for why fluctuations occurred also include the year on year 
             12.Present your findings as if you are analyzing a plot."""
-            chat = ChatOpenAI(temperature=0.0, model="gpt-3.5-turbo-0301",openai_api_key=API)
+            chat = ChatOpenAI(temperature=0.0, model=model,openai_api_key=API)
             user_analysis = analysis_templete.format_messages(instruction_analyis=instruction_analyis)
             response = chat(user_analysis)
             st.write(response.content)
@@ -231,7 +231,7 @@ with tab3:
         user_message = code_templete.format_messages(instruction=instruction,user_question=user_question)
                 
         st.markdown('<style>div.row-widget.stButton > button:first-child {background-color: blue; color: white;}</style>', unsafe_allow_html=True)
-        chat2 = ChatOpenAI(temperature=0.0, model="gpt-3.5-turbo-0301",openai_api_key=API)
+        chat2 = ChatOpenAI(temperature=0.0, model=model,openai_api_key=API)
         if st.button("Get Answer"):
             if user_question:
                 user_message = code_templete.format_messages(instruction=instruction,user_question=user_question)
