@@ -18,12 +18,9 @@ st.set_page_config(
 st.sidebar.markdown("<hr style='border: 2px solid red; width: 100%;'>", unsafe_allow_html=True)
 st.sidebar.image("Data/cropped-Sigmoid_logo_3x.png", use_column_width=True)
 st.sidebar.markdown("<hr style='border: 2px solid red; width: 100%;'>", unsafe_allow_html=True)
-API_KEY = st.sidebar.text_input("Enter the API key:",type="password")
-
-if st.sidebar.button("Enter"):
-    openai.api_key = os.environ[API_KEY]
-    st.sidebar.success("API key successfully set!")
-
+with st.sidebar:
+    openai_api_key = st.text_input("OpenAI API Key", key="api_key", type="password")
+    
 def select_country(d):
     country = st.sidebar.selectbox("Select Country:", d["geo"].unique().tolist())
     return country
@@ -119,6 +116,7 @@ with tab2:
             10.Use at most 200 words.
             11.provide conclusions about the dataset's performance over the years and include suggestions for why fluctuations occurred also include the year on year 
             12.Present your findings as if you are analyzing a plot."""
+            openai.api_key = openai_api_key
             chat = ChatOpenAI(temperature=0.0, model=model)
             user_analysis = analysis_templete.format_messages(instruction_analyis=instruction_analyis)
             response = chat(user_analysis)
@@ -232,6 +230,7 @@ with tab3:
         user_message = code_templete.format_messages(instruction=instruction,user_question=user_question)
                 
         st.markdown('<style>div.row-widget.stButton > button:first-child {background-color: blue; color: white;}</style>', unsafe_allow_html=True)
+        openai.api_key = openai_api_key
         chat2 = ChatOpenAI(temperature=0.0, model=model)
         if st.button("Get Answer"):
             if user_question:
