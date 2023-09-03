@@ -53,7 +53,7 @@ with tab2:
         st.sidebar.markdown("<hr style='border: 2px solid red; width: 100%;'>", unsafe_allow_html=True)
         st.sidebar.image("Code/cropped-Sigmoid_logo_3x.png", use_column_width=True)
         st.sidebar.markdown("<hr style='border: 2px solid red; width: 100%;'>", unsafe_allow_html=True)
-        API = st.sidebar.text_input("Enter the API key:")
+        API = st.sidebar.text_input("Enter the API key:",type="password")
         if st.sidebar.button("Enter"):
             openai.api_key = API
             st.sidebar.success("API key successfully set!")
@@ -238,13 +238,14 @@ with tab3:
         Provide code based on the user's question, keeping in mind that the name of the DataFrame is 'df_user'.
         Also, you have to print the final result of the code using 'st.write' for text or 'st.plot' for plots.
         Return the output in function form only. Call the function below the response in the same script and provide all the code together.
-        Only give the output of the function as a response. Only return the code; do not include any explanations or extra text.
+        Only give the output of the function as a response. Only return the code
+        ; do not include any explanations or extra text.
         If you include any comments, make sure each line starts with '#'.
         Also, include the code to suppress any warnings. Do not include [assistant].
         Do not read any dataset; just call the function with the df_user.
         Always return the final output with st.write or st.pyplot.
         Only give the code according to the user question
-        Do not enclose the code in triple backticks only give the executable code the code must start with the function def and end with the function call\n
+        Do not enclose the code in triple backticks only give the executable code the code must start with the function def and end with the function call
         Only give the executable line do not include any character that is non-executable
         """
         

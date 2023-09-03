@@ -25,6 +25,8 @@ seaborn
 numpy
 pyperclip
 openpyxl
+io
+fpdf
 
 
 
